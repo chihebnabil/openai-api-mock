@@ -16,7 +16,7 @@ function getResponce(requestBody) {
                 },
             ],
             created: created,
-            id: `chatcmpl-${faker.random.alphaNumeric(30)}`,
+            id: `chatcmpl-${faker.string.alphanumeric(30)}`,
             model: `gpt-3.5-mock`,
             object: 'chat.completion',
             usage: {
@@ -28,10 +28,10 @@ function getResponce(requestBody) {
     }
 
     let functionCallingResponse = {
-        id: `chatcmpl-${faker.random.alphaNumeric(30)}`,
+        id: `chatcmpl-${faker.string.alphanumeric(30)}`,
         object: 'chat.completion',
         created: created,
-        model: 'gpt-3.5-turbo-0613',
+        model: 'gpt-3.5-mock',
         choices: [
             {
                 index: 0,
@@ -55,18 +55,38 @@ function getResponce(requestBody) {
     return functionCallingResponse;
 }
 
+function generateFakeData(type, properties) {
+    if (type === 'string') {
+        return faker.lorem.words(5);
+    } else if (type === 'number') {
+        return faker.random.number();
+    } else if (type === 'array') {
+        const arrayItemsType = properties.items.type;
+        let arrayItems = [];
+        if (arrayItemsType === 'string') {
+            arrayItems = Array.from({ length: 5 }, () => faker.lorem.words(1));
+        } else if (arrayItemsType === 'object') {
+            const itemProperties = properties.items.properties;
+            arrayItems = Array.from({ length: 5 }, () => generateFakeData('object', { properties: itemProperties }));
+        }
+        return arrayItems;
+    } else if (type === 'object') {
+        const itemObject = {};
+        Object.entries(properties.properties).forEach(([itemName, itemDetails]) => {
+            itemObject[itemName] = generateFakeData(itemDetails.type, itemDetails);
+        });
+        return itemObject;
+    } else {
+        return faker.lorem.words(1);
+    }
+}
+
 function generateFunctionCallArguments(requestBody) {
     const { parameters } = requestBody.functions[0];
     const argumentsObject = {};
 
     Object.entries(parameters.properties).forEach(([paramName, paramDetails]) => {
-        if (paramDetails.type === 'string') {
-            argumentsObject[paramName] = faker.lorem.words(5);
-        } else if (paramDetails.type === 'number') {
-            argumentsObject[paramName] = faker.number.int();
-        } else {
-            argumentsObject[paramName] = faker.lorem.words(1);
-        }
+        argumentsObject[paramName] = generateFakeData(paramDetails.type, paramDetails);
     });
 
     return JSON.stringify(argumentsObject, null, 2);
