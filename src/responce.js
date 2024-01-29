@@ -76,10 +76,13 @@ function generateFakeData(type, properties) {
             itemObject[itemName] = generateFakeData(itemDetails.type, itemDetails);
         });
         return itemObject;
-    } else {
+    }else if (type === 'boolean') {
+        return faker.datatype.boolean();
+    }else {
         return faker.lorem.words(1);
     }
 }
+
 /*
 * Generate function call arguments
 */
