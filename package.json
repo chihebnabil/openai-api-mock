@@ -1,7 +1,11 @@
 {
   "name": "openai-api-mock",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "A Node.js module for mocking OpenAI API responses in a development environment",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chihebnabil/openai-api-mock"
+  },
   "keywords": [
     "openai",
     "mock",
@@ -11,6 +15,7 @@
   ],
   "author": "Chiheb Nabil",
   "license": "MIT",
+  "main": "main.js",
   "dependencies": {
     "@faker-js/faker": "^8.4.0",
     "nock": "^13.5.1"
