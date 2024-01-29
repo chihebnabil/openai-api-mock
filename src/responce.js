@@ -80,7 +80,9 @@ function generateFakeData(type, properties) {
         return faker.lorem.words(1);
     }
 }
-
+/*
+* Generate function call arguments
+*/
 function generateFunctionCallArguments(requestBody) {
     const { parameters } = requestBody.functions[0];
     const argumentsObject = {};
