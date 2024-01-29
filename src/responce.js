@@ -59,7 +59,7 @@ function generateFakeData(type, properties) {
     if (type === 'string') {
         return faker.lorem.words(5);
     } else if (type === 'number') {
-        return faker.random.number();
+        return faker.number.int();
     } else if (type === 'array') {
         const arrayItemsType = properties.items.type;
         let arrayItems = [];
