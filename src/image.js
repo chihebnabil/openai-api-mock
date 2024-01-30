@@ -19,8 +19,6 @@ function getImageResponce(requestBody) {
 }
 
 
-
-
 module.exports = {
   getImageResponce,
 };

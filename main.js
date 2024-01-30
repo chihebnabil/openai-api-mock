@@ -29,6 +29,11 @@ function mockOpenAIResponse(force = false) {
     }
 }
 
+function stopMocking() {
+    nock.cleanAll();
+}
+
 module.exports = {
-    mockOpenAIResponse
+    mockOpenAIResponse,
+    stopMocking
 };
