@@ -13,11 +13,17 @@
     "development",
     "testing"
   ],
+  "scripts": {
+    "test": "jest"
+  },
   "author": "Chiheb Nabil",
   "license": "MIT",
   "main": "main.js",
   "dependencies": {
     "@faker-js/faker": "^8.4.0",
     "nock": "^13.5.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
