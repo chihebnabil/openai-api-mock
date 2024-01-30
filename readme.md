@@ -4,6 +4,7 @@ This is a Node.js module for mocking OpenAI API responses in a development envir
 It's useful for testing and development purposes when you don't want to make actual API calls.
 The module also supports mocking function_calling
 
+
 ## Installation
 
 You can install this module using npm as a dev dependency :
@@ -12,11 +13,11 @@ You can install this module using npm as a dev dependency :
 npm install -D openai-api-mock
 ```
 
+
 ## Usage
 ```js
 const { mockOpenAIResponse } = require('openai-api-mock');
 ```
-
 
 Then, call the mockOpenAIResponse function to set up the mock response:
 
@@ -31,6 +32,12 @@ mockOpenAIResponse(force = true);
 The force parameter is a boolean that determines whether the mock response should be used regardless of the environment. 
 If force is true, the mock response will be used regardless of the environment. If force is false or not provided, the mock response will only be used if the <code>NODE_ENV</code> environment variable is set to 'development'.
 
+## Intercepted URLs
+
+This module uses the `nock` library to intercept HTTP calls to the following OpenAI API endpoints:
+
+- `https://api.openai.com/v1/chat/completions`: This endpoint is used for generating chat completions.
+- `https://api.openai.com/v1/images/generations`: This endpoint is used for generating images.
 
 
 ## Dependencies
