@@ -1,6 +1,6 @@
 const { faker } = require('@faker-js/faker');
 
-function getResponse(requestBody) {
+function getChatResponce(requestBody) {
     const created = Math.floor(Date.now() / 1000);
 
     if (!requestBody.functions) {
@@ -118,5 +118,5 @@ function generateFunctionCallArguments(requestBody) {
 }
 
 module.exports = {
-    getResponse,
+    getChatResponce,
 };
