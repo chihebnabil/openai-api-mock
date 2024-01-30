@@ -18,7 +18,6 @@
   "main": "main.js",
   "dependencies": {
     "@faker-js/faker": "^8.4.0",
-    "nock": "^13.5.1",
-    "openai": "^4.26.0"
+    "nock": "^13.5.1"
   }
 }
