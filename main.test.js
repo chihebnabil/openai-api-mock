@@ -1,9 +1,9 @@
 const { mockOpenAIResponse, stopMocking } = require('./main');
 
 const OpenAI = require('openai');
-const openai = new OpenAI();
+const openai = new OpenAI({apiKey : "OPENAI_API_KEY"});
 
-describe('mockOpenAIResponse', () => {
+describe('Mock OpenAI Chat & Image generation API', () => {
     beforeEach(() => {
         mockOpenAIResponse(true);
     });
@@ -12,7 +12,6 @@ describe('mockOpenAIResponse', () => {
     });
     it('should mock the chat completion', async () => {
         try {
-            // Post using fetch
             const response = await openai.chat.completions.create({
                 model: "gpt-3.5",
                 messages: [
@@ -30,7 +29,6 @@ describe('mockOpenAIResponse', () => {
 
     it('should mock the chat completion with function call', async () => {
         try {
-            // Post using fetch
             const response = await openai.chat.completions.create({
                 model: "gpt-3.5",
                 messages: [
@@ -113,10 +111,6 @@ describe('mockOpenAIResponse', () => {
     it('should allow other requests', async () => {
         try {
             const response = await fetch('https://jsonplaceholder.typicode.com/todos');
-            if (!response.ok) {
-                console.log('Response not OK:', response);
-                return;
-            }
             const data = await response.json();
             expect(data[0]).toHaveProperty('completed');
         } catch (error) {
