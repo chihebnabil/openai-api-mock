@@ -23,9 +23,7 @@ function mockOpenAIResponse(force = false) {
             });
 
         // Mocking only the chat completion endpoint, not blocking other requests
-        nock.emitter.on('no match', function (req) {
-            nock.enableNetConnect(req);
-        });
+        nock.enableNetConnect(host => host !== "api.openai.com");
     }
 }
 
