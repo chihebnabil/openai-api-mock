@@ -3,7 +3,7 @@ const { faker } = require('@faker-js/faker');
 function getChatResponce(requestBody) {
     const created = Math.floor(Date.now() / 1000);
 
-    if (!requestBody.functions) {
+    if (!requestBody.functions && !requestBody.tools) {
         return createDefaultResponse(created);
     }
 
@@ -36,6 +36,10 @@ function createDefaultResponse(created) {
 }
 
 function createFunctionCallingResponse(requestBody, created) {
+    const isTool = Boolean(requestBody.tools);
+    const functionOrToolCallObject = isTool ? [createToolCallObject(requestBody)] : createFunctionCallObject(requestBody);
+    const functionOrToolCall = isTool ? 'tool_calls' : 'function_call';
+
     const functionCallingResponse = {
         id: `chatcmpl-${faker.string.alphanumeric(30)}`,
         object: 'chat.completion',
@@ -47,9 +51,9 @@ function createFunctionCallingResponse(requestBody, created) {
                 message: {
                     role: 'assistant',
                     content: null,
-                    function_call: createFunctionCallObject(requestBody),
+                    [functionOrToolCall]: functionOrToolCallObject,
                 },
-                finish_reason: 'function_call',
+                finish_reason: functionOrToolCall,
             },
         ],
         usage: {
@@ -62,11 +66,32 @@ function createFunctionCallingResponse(requestBody, created) {
     return functionCallingResponse;
 }
 
+function createToolCallObject(requestBody) {
+    return {
+        id: `call-${faker.string.alphanumeric(30)}`,
+        type: "function",
+        "function": {
+            name: `${requestBody.tools[0].function.name}`,
+            arguments: `${generateToolCallArguments(requestBody)}`
+        }
+    };
+}
 function createFunctionCallObject(requestBody) {
     return {
         name: `${requestBody.functions[0].name}`,
         arguments: `${generateFunctionCallArguments(requestBody)}`,
     };
+}
+
+function generateToolCallArguments(requestBody) {
+    const { parameters } = requestBody.tools[0].function;
+    const argumentsObject = {};
+
+    Object.entries(parameters.properties).forEach(([paramName, paramDetails]) => {
+        argumentsObject[paramName] = generateFakeData(paramDetails.type, paramDetails);
+    });
+
+    return JSON.stringify(argumentsObject, null, 2);
 }
 
 function generateFakeData(type, properties) {
