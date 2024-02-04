@@ -49,7 +49,7 @@ const response = await openai.chat.completions.create({
  ```
 In this example, the `response` constant will contain mock data, simulating a response from the OpenAI API:
 
-```json
+```javascript
 {
     choices: [
         {
