@@ -1,0 +1,97 @@
+repo_name: chihebnabil/openai-api-mock
+report_id: 977cb1ab2877690d721185d0606f0362
+version: 0.1
+repo_type: Public
+timestamp: '2024-02-08T19:19:53+00:00'
+requested_by: chihebnabil
+provider: github
+branch: dev
+detected_tools_count: 7
+tools:
+- name: JavaScript
+  description: Lightweight, interpreted, object-oriented language with first-class
+    functions
+  website_url: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1209/javascript.jpeg
+  detection_source_url: https://github.com/chihebnabil/openai-api-mock
+  detection_source: Repo Metadata
+- name: Git
+  description: Fast, scalable, distributed revision control system
+  website_url: http://git-scm.com/
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Version Control System
+  image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source_url: https://github.com/chihebnabil/openai-api-mock
+  detection_source: Repo Metadata
+- name: Jest
+  description: Painless JavaScript Unit Testing
+  website_url: http://facebook.github.io/jest/
+  version: 29.7.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Javascript Testing Framework
+  image_url: https://img.stackshare.io/service/830/jest.png
+  detection_source_url: https://github.com/chihebnabil/openai-api-mock/blob/dev/package-lock.json
+  detection_source: package.json
+  last_updated_by: Chiheb Nabil
+  last_updated_on: 2024-01-29 11:46:18.000000000 Z
+- name: npm
+  description: The package manager for JavaScript.
+  website_url: https://www.npmjs.com/
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Front End Package Manager
+  image_url: https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png
+  detection_source_url: https://github.com/chihebnabil/openai-api-mock/blob/dev/package.json
+  detection_source: package.json
+  last_updated_by: Chiheb Nabil
+  last_updated_on: 2024-01-29 11:46:18.000000000 Z
+- name: OpenAI
+  description: Creating safe AGI that benefits all
+  website_url: https://openai.com/
+  version: 4.26.0
+  open_source: false
+  hosted_saas: false
+  category: Communications
+  sub_category: Large Language Models
+  image_url: https://img.stackshare.io/service/48786/default_8b1119bcbb159cebebc2f6cfc9cd2e359b169d22.jpg
+  detection_source_url: https://github.com/chihebnabil/openai-api-mock/blob/dev/package-lock.json
+  detection_source: package.json
+  last_updated_by: Chiheb Nabil
+  last_updated_on: 2024-01-29 11:46:18.000000000 Z
+- name: nock
+  description: HTTP server mocking and expectations library for Node.js
+  package_url: https://www.npmjs.com/nock
+  version: 13.5.1
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16036/default_5fd43aeff4d6a935abc13737de01a0355210499d.png
+  detection_source_url: https://github.com/chihebnabil/openai-api-mock/blob/dev/package-lock.json
+  detection_source: package.json
+  last_updated_by: Chiheb Nabil
+  last_updated_on: 2024-01-30 12:09:53.000000000 Z
+- name: openai
+  description: The official TypeScript library for the OpenAI API
+  package_url: https://www.npmjs.com/openai
+  version: 4.26.0
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/npm/image.png
+  detection_source_url: https://github.com/chihebnabil/openai-api-mock/blob/dev/package-lock.json
+  detection_source: package.json
+  last_updated_by: Chiheb Nabil
+  last_updated_on: 2024-01-31 10:56:07.000000000 Z
