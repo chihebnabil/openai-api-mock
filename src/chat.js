@@ -99,12 +99,24 @@ function generateToolCallArguments(requestBody) {
   return JSON.stringify(argumentsObject, null, 2);
 }
 
-function generateFakeData(type, properties) {
+function generateFakeData(type, properties, name) {
   switch (type) {
     case "string":
-      return faker.lorem.words(5);
+      if (name === "name") {
+        return faker.person.fullName();
+      } else if (name === "email") {
+        return faker.internet.email();
+      } else if (name === "price") {
+        return faker.commerce.price({ min: 100 })
+      } else if (name === "company") {
+        return faker.company.bs()
+      } else if (name === "phone") {
+        return faker.phone.number()
+      } else {
+        return faker.lorem.words(5);
+      }
     case "number":
-      return faker.number.int();
+      return faker.number.int({ max: 100 });
     case "array":
       return generateFakeArray(properties);
     case "object":
@@ -131,7 +143,7 @@ function generateFakeArray(properties) {
 function generateFakeObject(properties) {
   const itemObject = {};
   Object.entries(properties.properties).forEach(([itemName, itemDetails]) => {
-    itemObject[itemName] = generateFakeData(itemDetails.type, itemDetails);
+    itemObject[itemName] = generateFakeData(itemDetails.type, itemDetails, itemName);
   });
   return itemObject;
 }
