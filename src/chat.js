@@ -107,11 +107,25 @@ function generateFakeData(type, properties, name) {
       } else if (name === "email") {
         return faker.internet.email();
       } else if (name === "price") {
-        return faker.commerce.price({ min: 100 })
+        return faker.commerce.price({ min: 100 });
       } else if (name === "company") {
-        return faker.company.bs()
+        return faker.company.bs();
       } else if (name === "phone") {
-        return faker.phone.number()
+        return faker.phone.number();
+      } else if (name === "address") {
+        return faker.address.streetAddress();
+      } else if (name === "date") {
+        return faker.date.past();
+      } else if (name === "jobTitle") {
+        return faker.name.jobTitle();
+      } else if (name === "creditCardNumber") {
+        return faker.finance.creditCardNumber();
+      } else if (name === "currencyCode") {
+        return faker.finance.currencyCode();
+      } else if (name === "productName") {
+        return faker.commerce.productName();
+      } else if (name === "uuid") {
+        return faker.datatype.uuid();
       } else {
         return faker.lorem.words(5);
       }
