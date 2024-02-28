@@ -89,6 +89,49 @@ describe('Mock OpenAI Chat & Image generation API', () => {
     });
 
 
+    it('should mock the chat completion with email function call (tools)', async () => {
+        try{
+            const response = await openai.chat.completions.create({
+                model: "gpt-3.5",
+                messages: [
+                    { role: 'system', content: "You'r an expert chef" },
+                    { role: 'user', content: "Suggest at least 5 recipes" },
+                ],
+                tools: [
+                    {
+                    type: "function",
+                    function: {
+                        name: 'send_email',
+                        description: 'Send an email to the user with the recipes',
+                        parameters: {
+                            type: "object",
+                            properties: {
+                                email: {
+                                    type: "string",
+                                    description: "The email address of the user",
+                                }
+                            }
+                        },
+                        required: ["email"],
+                    }
+
+                }],
+
+                tool_choice: { name: 'send_email' },
+            });
+            expect(response.model).toEqual('gpt-3.5-mock');
+            expect(response.choices[0]).toHaveProperty('finish_reason', 'tool_calls');
+            expect(response.choices[0].message.tool_calls[0].function).toHaveProperty('name', 'send_email');
+            expect(response.choices[0].message.tool_calls[0].function).toHaveProperty('arguments');
+            expect(JSON.parse(response.choices[0].message.tool_calls[0].function.arguments)).toHaveProperty('email');
+         
+        }catch(error){
+            throw new Error(error);
+        }
+
+    });
+
+
     it('should mock the chat completion with function call (tools)', async () => {
             const response = await openai.chat.completions.create({
                 model: "gpt-3.5",
