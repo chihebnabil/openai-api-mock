@@ -66,7 +66,7 @@ In this example, the `response` constant will contain mock data, simulating a re
       usage: { completion_tokens: 17, prompt_tokens: 57, total_tokens: 74 }
 }
 ```
-The library is also support `streaming"
+The library also supports mocking `stream` responses
 
 ```js
 // Call the mockOpenAIResponse function once to set up the mock
