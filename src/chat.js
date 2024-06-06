@@ -35,6 +35,8 @@ function createDefaultResponse(created) {
   };
 }
 
+
+
 function createFunctionCallingResponse(requestBody, created) {
   const isTool = Boolean(requestBody.tools);
   const functionOrToolCallObject = isTool

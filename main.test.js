@@ -1,4 +1,5 @@
 const { mockOpenAIResponse, stopMocking } = require('./main');
+const { Stream } = require('stream');
 
 const OpenAI = require('openai');
 const openai = new OpenAI({ apiKey: "OPENAI_API_KEY" });
@@ -21,6 +22,24 @@ describe('Mock OpenAI Chat & Image generation API', () => {
             });
             expect(response.choices[0]).toHaveProperty('finish_reason', 'stop');
             expect(response.model).toEqual('gpt-3.5-mock');
+        } catch (error) {
+            throw new Error(error);
+        }
+    });
+
+    it('should mock the streaming chat completion', async () => {
+        try {
+            const response = await openai.chat.completions.create({
+                model: "gpt-3.5",
+                stream: true,
+                messages: [
+                    { role: 'user', content: "What's the biggest country in the world" },
+                ]
+            });
+
+            for await (const part of response) {
+                console.log(part.choices[0]?.delta?.content || '')
+            }
         } catch (error) {
             throw new Error(error);
         }
@@ -90,7 +109,7 @@ describe('Mock OpenAI Chat & Image generation API', () => {
 
 
     it('should mock the chat completion with email function call (tools)', async () => {
-        try{
+        try {
             const response = await openai.chat.completions.create({
                 model: "gpt-3.5",
                 messages: [
@@ -99,23 +118,23 @@ describe('Mock OpenAI Chat & Image generation API', () => {
                 ],
                 tools: [
                     {
-                    type: "function",
-                    function: {
-                        name: 'send_email',
-                        description: 'Send an email to the user with the recipes',
-                        parameters: {
-                            type: "object",
-                            properties: {
-                                email: {
-                                    type: "string",
-                                    description: "The email address of the user",
+                        type: "function",
+                        function: {
+                            name: 'send_email',
+                            description: 'Send an email to the user with the recipes',
+                            parameters: {
+                                type: "object",
+                                properties: {
+                                    email: {
+                                        type: "string",
+                                        description: "The email address of the user",
+                                    }
                                 }
-                            }
-                        },
-                        required: ["email"],
-                    }
+                            },
+                            required: ["email"],
+                        }
 
-                }],
+                    }],
 
                 tool_choice: { name: 'send_email' },
             });
@@ -124,8 +143,8 @@ describe('Mock OpenAI Chat & Image generation API', () => {
             expect(response.choices[0].message.tool_calls[0].function).toHaveProperty('name', 'send_email');
             expect(response.choices[0].message.tool_calls[0].function).toHaveProperty('arguments');
             expect(JSON.parse(response.choices[0].message.tool_calls[0].function.arguments)).toHaveProperty('email');
-         
-        }catch(error){
+
+        } catch (error) {
             throw new Error(error);
         }
 
@@ -133,14 +152,14 @@ describe('Mock OpenAI Chat & Image generation API', () => {
 
 
     it('should mock the chat completion with function call (tools)', async () => {
-            const response = await openai.chat.completions.create({
-                model: "gpt-3.5",
-                messages: [
-                    { role: 'system', content: "You'r an expert chef" },
-                    { role: 'user', content: "Suggest at least 5 recipes" },
-                ],
-                tools: [
-                    {
+        const response = await openai.chat.completions.create({
+            model: "gpt-3.5",
+            messages: [
+                { role: 'system', content: "You'r an expert chef" },
+                { role: 'user', content: "Suggest at least 5 recipes" },
+            ],
+            tools: [
+                {
                     type: "function",
                     function: {
                         name: 'get_recipes',
@@ -183,13 +202,13 @@ describe('Mock OpenAI Chat & Image generation API', () => {
                     }
 
                 }],
-                tool_choice: { name: 'get_recipes' },
-            });
-            expect(response.model).toEqual('gpt-3.5-mock');
-            expect(response.choices[0]).toHaveProperty('finish_reason', 'tool_calls');
-            expect(response.choices[0].message.tool_calls[0].function).toHaveProperty('name', 'get_recipes');
-            expect(response.choices[0].message.tool_calls[0].function).toHaveProperty('arguments');
-            expect(JSON.parse(response.choices[0].message.tool_calls[0].function.arguments)).toHaveProperty('recipes');
+            tool_choice: { name: 'get_recipes' },
+        });
+        expect(response.model).toEqual('gpt-3.5-mock');
+        expect(response.choices[0]).toHaveProperty('finish_reason', 'tool_calls');
+        expect(response.choices[0].message.tool_calls[0].function).toHaveProperty('name', 'get_recipes');
+        expect(response.choices[0].message.tool_calls[0].function).toHaveProperty('arguments');
+        expect(JSON.parse(response.choices[0].message.tool_calls[0].function.arguments)).toHaveProperty('recipes');
     });
 
 

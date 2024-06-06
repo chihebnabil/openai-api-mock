@@ -1,5 +1,9 @@
 const nock = require('nock');
+
+
 const { getChatResponce } = require('./src/chat.js');
+const { createChatStream } = require('./src/chat.stream.js');
+
 const { getImageResponce } = require('./src/image.js');
 
 const OPEN_AI_BASE_URL = 'https://api.openai.com';
@@ -13,6 +17,13 @@ function mockOpenAIResponse(force = false) {
         nock(OPEN_AI_BASE_URL)
             .post(CHAT_COMPLETIONS_ENDPOINT)
             .reply(function (uri, requestBody) {
+                let isSteaming = (requestBody.stream && requestBody.stream == true) ? true : false
+
+                if (isSteaming) {
+                    const stream = createChatStream();
+                    return [200, stream];
+                }
+
                 return [200, getChatResponce(requestBody)];
             });
 

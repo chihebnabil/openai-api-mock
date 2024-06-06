@@ -66,7 +66,26 @@ In this example, the `response` constant will contain mock data, simulating a re
       usage: { completion_tokens: 17, prompt_tokens: 57, total_tokens: 74 }
 }
 ```
+The library is also support `streaming"
 
+```js
+// Call the mockOpenAIResponse function once to set up the mock
+mockOpenAIResponse() 
+// Now, when you call the OpenAI API, it will return a mock response
+const response = await openai.chat.completions.create({
+                model: "gpt-3.5",
+                stream : true,
+                messages: [
+                    { role: 'system', content: "You'r an expert chef" },
+                    { role: 'user', content: "Suggest at least 5 recipes" },
+                ]
+});
+
+// then read it 
+for await (const part of response) {
+    console.log(part.choices[0]?.delta?.content || '')
+}
+```
 
 ## Intercepted URLs
 
