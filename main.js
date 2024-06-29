@@ -3,7 +3,6 @@ const nock = require('nock');
 
 const { getChatResponce } = require('./src/chat.js');
 const { createChatStream } = require('./src/chat.stream.js');
-
 const { getImageResponce } = require('./src/image.js');
 
 const OPEN_AI_BASE_URL = 'https://api.openai.com';
