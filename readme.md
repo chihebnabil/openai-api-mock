@@ -30,7 +30,9 @@ This function intercepts HTTP calls to the OpenAI endpoint and returns a mock re
 mockOpenAIResponse(force = true);
 ```
 The force parameter is a boolean that determines whether the mock response should be used regardless of the environment. 
-If force is true, the mock response will be used regardless of the environment. If force is false or not provided, the mock response will only be used if the <code>NODE_ENV</code> environment variable is set to 'development'.
+If force is true, the mock response will be used regardless of the environment. 
+
+If force is `false` or not provided, the mock response will only be used if the `NODE_ENV` environment variable is set to `development`.
 
 ### Example responces
 
