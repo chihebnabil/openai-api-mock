@@ -22,11 +22,11 @@
   "license": "MIT",
   "main": "main.js",
   "dependencies": {
-    "@faker-js/faker": "^8.4.0",
-    "nock": "^13.5.1"
+    "@faker-js/faker": "^8.4.1",
+    "nock": "^13.5.4"
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "openai": "^4.26.0"
+    "openai": "^4.52.4"
   }
 }
