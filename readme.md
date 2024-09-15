@@ -1,8 +1,14 @@
 # OpenAI API Mock
 
 This is a Node.js module for mocking OpenAI API responses in a development environment. 
+
 It's useful for testing and development purposes when you don't want to make actual API calls.
-The module also supports mocking function_calling
+
+The module supports the following OpenAI API endpoints:
+- chat completions
+- chat completions with streaming
+- chat completions with functions
+- image generations
 
 
 ## Installation
