@@ -20,7 +20,7 @@ describe('Mock OpenAI Chat & Image generation API', () => {
                     { role: 'user', content: "Suggest at least 5 recipes" },
                 ]
             });
-            
+
             expect(response).toHaveProperty('id');
             expect(response).toHaveProperty('object', 'chat.completion');
             expect(response).toHaveProperty('created');
