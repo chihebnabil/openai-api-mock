@@ -219,7 +219,6 @@ const responseRandom = await openai.chat.completions.create({...});
 ```
 
 For comprehensive examples and best practices, see [CONSISTENCY_EXAMPLES.md](./CONSISTENCY_EXAMPLES.md).
-```
 
 ## Intercepted URLs
 
@@ -264,12 +263,11 @@ mock.addCustomEndpoint('POST', '/v1/custom', (uri, body) => {
     return [200, { custom: 'response' }];
 });
 ```
-
 ## Dependencies
 This module depends on the following npm packages:
 
-- nock : For intercepting HTTP calls.
-- @faker-js/faker : For generating fake data.
+- `nock` : For intercepting HTTP calls.
+- `@faker-js/faker` : For generating fake data.
 
 ## License
 This project is licensed under the MIT License.
