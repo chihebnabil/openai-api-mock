@@ -32,7 +32,10 @@
     "pretest": "npm run build",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "format:src": "prettier --write src/**/*.js __tests__/**/*.js"
   },
   "author": "Chiheb Nabil",
   "license": "MIT",
@@ -56,6 +59,7 @@
     "jest": "^30.0.0",
     "node-fetch": "^3.3.2",
     "openai": "^4.52.4",
+    "prettier": "^3.0.0",
     "vite": "^7.0.0"
   },
   "engines": {
