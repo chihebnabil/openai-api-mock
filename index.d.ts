@@ -1,4 +1,3 @@
-
 export interface MockOptions {
   /**
    * When true, randomly simulates API errors
@@ -46,7 +45,10 @@ export interface MockControl {
   /**
    * Create a custom response template
    */
-  createResponseTemplate: (templateType: string, overrides?: Record<string, any>) => Record<string, any>;
+  createResponseTemplate: (
+    templateType: string,
+    overrides?: Record<string, any>
+  ) => Record<string, any>;
   /**
    * Adds a custom endpoint mock
    * @param method - HTTP method (GET, POST, etc.)

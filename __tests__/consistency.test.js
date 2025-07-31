@@ -17,23 +17,23 @@ describe('Consistent Output Mechanisms', () => {
     test('should produce identical responses with the same seed', async () => {
       // First run with seed
       mockControl = mockOpenAIResponse(true, { seed: 12345 });
-      
+
       const OpenAI = (await import('openai')).default;
       const openai = new OpenAI({ apiKey: 'test-key' });
-      
+
       const response1 = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: 'Hello' }]
+        messages: [{ role: 'user', content: 'Hello' }],
       });
 
       mockControl.stopMocking();
 
       // Second run with same seed
       mockControl = mockOpenAIResponse(true, { seed: 12345 });
-      
+
       const response2 = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: 'Hello' }]
+        messages: [{ role: 'user', content: 'Hello' }],
       });
 
       // Responses should be identical
@@ -43,23 +43,23 @@ describe('Consistent Output Mechanisms', () => {
     test('should produce different responses with different seeds', async () => {
       // First run with seed 12345
       mockControl = mockOpenAIResponse(true, { seed: 12345 });
-      
+
       const OpenAI = (await import('openai')).default;
       const openai = new OpenAI({ apiKey: 'test-key' });
-      
+
       const response1 = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: 'Hello' }]
+        messages: [{ role: 'user', content: 'Hello' }],
       });
 
       mockControl.stopMocking();
 
       // Second run with different seed
       mockControl = mockOpenAIResponse(true, { seed: 54321 });
-      
+
       const response2 = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: 'Hello' }]
+        messages: [{ role: 'user', content: 'Hello' }],
       });
 
       // Responses should be different
@@ -68,24 +68,24 @@ describe('Consistent Output Mechanisms', () => {
 
     test('should allow runtime seed changes', async () => {
       mockControl = mockOpenAIResponse(true);
-      
+
       const OpenAI = (await import('openai')).default;
       const openai = new OpenAI({ apiKey: 'test-key' });
-      
+
       // Set seed at runtime
       mockControl.setSeed(12345);
-      
+
       const response1 = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: 'Hello' }]
+        messages: [{ role: 'user', content: 'Hello' }],
       });
 
       // Change seed
       mockControl.setSeed(12345);
-      
+
       const response2 = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: 'Hello' }]
+        messages: [{ role: 'user', content: 'Hello' }],
       });
 
       // Responses should be identical with same seed
@@ -96,18 +96,18 @@ describe('Consistent Output Mechanisms', () => {
   describe('Fixed response templates', () => {
     test('should use fixed templates when enabled', async () => {
       mockControl = mockOpenAIResponse(true, { useFixedResponses: true });
-      
+
       const OpenAI = (await import('openai')).default;
       const openai = new OpenAI({ apiKey: 'test-key' });
-      
+
       const response1 = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: 'Hello' }]
+        messages: [{ role: 'user', content: 'Hello' }],
       });
 
       const response2 = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: 'Different message' }]
+        messages: [{ role: 'user', content: 'Different message' }],
       });
 
       // Both responses should be identical and match the template
@@ -118,10 +118,10 @@ describe('Consistent Output Mechanisms', () => {
 
     test('should use function call template for function requests', async () => {
       mockControl = mockOpenAIResponse(true, { useFixedResponses: true });
-      
+
       const OpenAI = (await import('openai')).default;
       const openai = new OpenAI({ apiKey: 'test-key' });
-      
+
       const response = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
         messages: [{ role: 'user', content: 'Hello' }],
@@ -132,11 +132,11 @@ describe('Consistent Output Mechanisms', () => {
             parameters: {
               type: 'object',
               properties: {
-                location: { type: 'string' }
-              }
-            }
-          }
-        ]
+                location: { type: 'string' },
+              },
+            },
+          },
+        ],
       });
 
       expect(response.choices[0].message.function_call).toBeDefined();
@@ -146,9 +146,9 @@ describe('Consistent Output Mechanisms', () => {
 
     test('should provide access to response templates', () => {
       mockControl = mockOpenAIResponse(true);
-      
+
       const templates = mockControl.getResponseTemplates();
-      
+
       expect(templates).toHaveProperty('SIMPLE_CHAT');
       expect(templates).toHaveProperty('FUNCTION_CALL');
       expect(templates).toHaveProperty('TOOL_CALL');
@@ -157,15 +157,15 @@ describe('Consistent Output Mechanisms', () => {
 
     test('should allow creating custom response templates', () => {
       mockControl = mockOpenAIResponse(true);
-      
+
       const customTemplate = mockControl.createResponseTemplate('SIMPLE_CHAT', {
         choices: [
           {
             message: {
-              content: 'Custom response content'
-            }
-          }
-        ]
+              content: 'Custom response content',
+            },
+          },
+        ],
       });
 
       expect(customTemplate.choices[0].message.content).toBe('Custom response content');
@@ -177,16 +177,16 @@ describe('Consistent Output Mechanisms', () => {
   describe('Image generation consistency', () => {
     test('should use fixed template for image generation', async () => {
       mockControl = mockOpenAIResponse(true, { useFixedResponses: true });
-      
+
       const OpenAI = (await import('openai')).default;
       const openai = new OpenAI({ apiKey: 'test-key' });
-      
+
       const response1 = await openai.images.generate({
-        prompt: 'A sunset over mountains'
+        prompt: 'A sunset over mountains',
       });
 
       const response2 = await openai.images.generate({
-        prompt: 'A cat wearing a hat'
+        prompt: 'A cat wearing a hat',
       });
 
       // Both responses should be identical

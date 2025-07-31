@@ -1,28 +1,28 @@
 import { Readable } from 'node:stream';
-import { getSteamChatObject } from './utils/responseGenerators.js'
+import { getSteamChatObject } from './utils/responseGenerators.js';
 
 export function createChatStream() {
-    const stream = new Readable({
-        read() { }
-    });
+  const stream = new Readable({
+    read() {},
+  });
 
-    let count = 0;
-    const maxCount = 5;
+  let count = 0;
+  const maxCount = 5;
 
-    function sendData() {
-        setTimeout(() => {
-            if (count < maxCount - 1) {
-                stream.push(`data: ${getSteamChatObject()}\n\n`);
-                count++;
-                sendData(); // Call the function recursively until the last iteration
-            } else if (count === maxCount - 1) {
-                stream.push(`data: [DONE]\n\n`);
-                stream.push(null); // End the stream after sending the data
-            }
-        }, 200);
-    }
+  function sendData() {
+    setTimeout(() => {
+      if (count < maxCount - 1) {
+        stream.push(`data: ${getSteamChatObject()}\n\n`);
+        count++;
+        sendData(); // Call the function recursively until the last iteration
+      } else if (count === maxCount - 1) {
+        stream.push(`data: [DONE]\n\n`);
+        stream.push(null); // End the stream after sending the data
+      }
+    }, 200);
+  }
 
-    sendData(); // Start sending data
+  sendData(); // Start sending data
 
-    return stream;
+  return stream;
 }

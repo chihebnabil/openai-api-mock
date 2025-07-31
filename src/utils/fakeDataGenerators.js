@@ -5,11 +5,7 @@ export function generateToolCallArguments(requestBody) {
   const argumentsObject = {};
 
   Object.entries(parameters.properties).forEach(([paramName, paramDetails]) => {
-    argumentsObject[paramName] = generateFakeData(
-      paramDetails.type,
-      paramDetails,
-      paramName
-    );
+    argumentsObject[paramName] = generateFakeData(paramDetails.type, paramDetails, paramName);
   });
 
   return JSON.stringify(argumentsObject, null, 2);
@@ -20,11 +16,7 @@ export function generateFunctionCallArguments(requestBody) {
   const argumentsObject = {};
 
   Object.entries(parameters.properties).forEach(([paramName, paramDetails]) => {
-    argumentsObject[paramName] = generateFakeData(
-      paramDetails.type,
-      paramDetails,
-      paramName
-    );
+    argumentsObject[paramName] = generateFakeData(paramDetails.type, paramDetails, paramName);
   });
 
   return JSON.stringify(argumentsObject, null, 2);
@@ -32,15 +24,15 @@ export function generateFunctionCallArguments(requestBody) {
 
 export function generateFakeData(type, properties, name) {
   switch (type) {
-    case "string":
+    case 'string':
       return generateFakeStringData(name);
-    case "number":
+    case 'number':
       return faker.number.int({ max: 100 });
-    case "array":
+    case 'array':
       return generateFakeArray(properties);
-    case "object":
+    case 'object':
       return generateFakeObject(properties);
-    case "boolean":
+    case 'boolean':
       return faker.datatype.boolean();
     default:
       return faker.lorem.words(1);
@@ -50,11 +42,11 @@ export function generateFakeData(type, properties, name) {
 export function generateFakeArray(properties) {
   const arrayItemsType = properties.items.type;
   return Array.from({ length: 5 }, () => {
-    if (arrayItemsType === "string") {
+    if (arrayItemsType === 'string') {
       return faker.lorem.words(1);
-    } else if (arrayItemsType === "object") {
+    } else if (arrayItemsType === 'object') {
       const itemProperties = properties.items.properties;
-      return generateFakeData("object", { properties: itemProperties }, "item");
+      return generateFakeData('object', { properties: itemProperties }, 'item');
     }
   });
 }
@@ -68,29 +60,29 @@ export function generateFakeObject(properties) {
 }
 
 export function generateFakeStringData(name) {
-  if (name === "name") {
+  if (name === 'name') {
     return faker.person.fullName();
-  } else if (name === "email") {
+  } else if (name === 'email') {
     return faker.internet.email();
-  } else if (name === "price") {
+  } else if (name === 'price') {
     return faker.commerce.price();
-  } else if (name === "company") {
+  } else if (name === 'company') {
     return faker.company.name();
-  } else if (name === "phone") {
+  } else if (name === 'phone') {
     return faker.phone.number();
-  } else if (name === "address") {
+  } else if (name === 'address') {
     return faker.location.streetAddress();
-  } else if (name === "date") {
+  } else if (name === 'date') {
     return faker.date.past();
-  } else if (name === "jobTitle") {
+  } else if (name === 'jobTitle') {
     return faker.person.jobTitle();
-  } else if (name === "creditCardNumber") {
+  } else if (name === 'creditCardNumber') {
     return faker.finance.creditCardNumber();
-  } else if (name === "currencyCode") {
+  } else if (name === 'currencyCode') {
     return faker.finance.currencyCode();
-  } else if (name === "productName") {
+  } else if (name === 'productName') {
     return faker.commerce.productName();
-  } else if (name === "uuid") {
+  } else if (name === 'uuid') {
     return faker.string.uuid();
   } else {
     return faker.lorem.words(5);

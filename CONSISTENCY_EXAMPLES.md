@@ -3,6 +3,7 @@
 This document demonstrates the various mechanisms available for achieving consistent, deterministic outputs when using the OpenAI API Mock library.
 
 ## Table of Contents
+
 1. [Seed-based Consistency](#seed-based-consistency)
 2. [Fixed Response Templates](#fixed-response-templates)
 3. [Runtime Seed Management](#runtime-seed-management)
@@ -19,9 +20,9 @@ import { mockOpenAIResponse } from 'openai-api-mock';
 import OpenAI from 'openai';
 
 // Set up mock with a fixed seed
-const mockControl = mockOpenAIResponse(true, { 
+const mockControl = mockOpenAIResponse(true, {
   seed: 12345,
-  logRequests: true 
+  logRequests: true,
 });
 
 const openai = new OpenAI({ apiKey: 'test-key' });
@@ -29,12 +30,12 @@ const openai = new OpenAI({ apiKey: 'test-key' });
 // Multiple calls will return identical responses
 const response1 = await openai.chat.completions.create({
   model: 'gpt-3.5-turbo',
-  messages: [{ role: 'user', content: 'Hello' }]
+  messages: [{ role: 'user', content: 'Hello' }],
 });
 
 const response2 = await openai.chat.completions.create({
-  model: 'gpt-3.5-turbo', 
-  messages: [{ role: 'user', content: 'Hello' }]
+  model: 'gpt-3.5-turbo',
+  messages: [{ role: 'user', content: 'Hello' }],
 });
 
 // response1 and response2 will be identical
@@ -50,15 +51,15 @@ mockControl.stopMocking();
 const mockA = mockOpenAIResponse(true, { seed: 12345 });
 const responseA = await openai.chat.completions.create({
   model: 'gpt-3.5-turbo',
-  messages: [{ role: 'user', content: 'Hello' }]
+  messages: [{ role: 'user', content: 'Hello' }],
 });
 mockA.stopMocking();
 
-// Test with seed B  
+// Test with seed B
 const mockB = mockOpenAIResponse(true, { seed: 54321 });
 const responseB = await openai.chat.completions.create({
   model: 'gpt-3.5-turbo',
-  messages: [{ role: 'user', content: 'Hello' }]
+  messages: [{ role: 'user', content: 'Hello' }],
 });
 mockB.stopMocking();
 
@@ -74,14 +75,14 @@ For maximum consistency, use predefined response templates that return exactly t
 
 ```javascript
 // Enable fixed responses
-const mockControl = mockOpenAIResponse(true, { 
+const mockControl = mockOpenAIResponse(true, {
   useFixedResponses: true,
-  logRequests: true 
+  logRequests: true,
 });
 
 const response = await openai.chat.completions.create({
   model: 'gpt-3.5-turbo',
-  messages: [{ role: 'user', content: 'Any message here' }]
+  messages: [{ role: 'user', content: 'Any message here' }],
 });
 
 // Will always return:
@@ -115,16 +116,18 @@ const mockControl = mockOpenAIResponse(true, { useFixedResponses: true });
 const response = await openai.chat.completions.create({
   model: 'gpt-3.5-turbo',
   messages: [{ role: 'user', content: 'Get weather' }],
-  functions: [{
-    name: 'get_weather',
-    description: 'Get weather information',
-    parameters: {
-      type: 'object',
-      properties: {
-        location: { type: 'string' }
-      }
-    }
-  }]
+  functions: [
+    {
+      name: 'get_weather',
+      description: 'Get weather information',
+      parameters: {
+        type: 'object',
+        properties: {
+          location: { type: 'string' },
+        },
+      },
+    },
+  ],
 });
 
 // Returns consistent function call response
@@ -141,7 +144,7 @@ console.log(response.choices[0].message.function_call);
 const mockControl = mockOpenAIResponse(true, { useFixedResponses: true });
 
 const response = await openai.images.generate({
-  prompt: 'A sunset over mountains'
+  prompt: 'A sunset over mountains',
 });
 
 // Always returns the same image URL
@@ -159,21 +162,21 @@ const mockControl = mockOpenAIResponse(true, { logRequests: true });
 mockControl.setSeed(12345);
 const response1 = await openai.chat.completions.create({
   model: 'gpt-3.5-turbo',
-  messages: [{ role: 'user', content: 'Hello' }]
+  messages: [{ role: 'user', content: 'Hello' }],
 });
 
 // Change seed for different behavior
 mockControl.setSeed(54321);
 const response2 = await openai.chat.completions.create({
   model: 'gpt-3.5-turbo',
-  messages: [{ role: 'user', content: 'Hello' }]
+  messages: [{ role: 'user', content: 'Hello' }],
 });
 
 // Reset to random responses
 mockControl.resetSeed();
 const response3 = await openai.chat.completions.create({
   model: 'gpt-3.5-turbo',
-  messages: [{ role: 'user', content: 'Hello' }]
+  messages: [{ role: 'user', content: 'Hello' }],
 });
 
 mockControl.stopMocking();
@@ -193,17 +196,19 @@ console.log('Available templates:', Object.keys(templates));
 
 // Create a custom template based on existing one
 const customTemplate = mockControl.createResponseTemplate('SIMPLE_CHAT', {
-  choices: [{
-    message: {
-      content: 'This is my custom response content!'
-    }
-  }],
+  choices: [
+    {
+      message: {
+        content: 'This is my custom response content!',
+      },
+    },
+  ],
   model: 'gpt-4-custom-mock',
   usage: {
     completion_tokens: 50,
     prompt_tokens: 100,
-    total_tokens: 150
-  }
+    total_tokens: 150,
+  },
 });
 
 console.log('Custom template:', customTemplate);
@@ -212,21 +217,21 @@ console.log('Custom template:', customTemplate);
 
 // Example 1: Set seed during initialization
 const mockControl = mockOpenAIResponse(true, {
-  seed: 12345,
-  logRequests: true
+seed: 12345,
+logRequests: true
 });
 
 const openai = new OpenAI({ apiKey: 'test-key' });
 
 // These calls will produce identical responses
 const response1 = await openai.chat.completions.create({
-  model: 'gpt-3.5-turbo',
-  messages: [{ role: 'user', content: 'Hello' }]
+model: 'gpt-3.5-turbo',
+messages: [{ role: 'user', content: 'Hello' }]
 });
 
 const response2 = await openai.chat.completions.create({
-  model: 'gpt-3.5-turbo',
-  messages: [{ role: 'user', content: 'Hello' }]
+model: 'gpt-3.5-turbo',
+messages: [{ role: 'user', content: 'Hello' }]
 });
 
 console.log(response1.choices[0].message.content === response2.choices[0].message.content); // true
@@ -235,8 +240,8 @@ console.log(response1.choices[0].message.content === response2.choices[0].messag
 mockControl.setSeed(54321);
 
 const response3 = await openai.chat.completions.create({
-  model: 'gpt-3.5-turbo',
-  messages: [{ role: 'user', content: 'Hello' }]
+model: 'gpt-3.5-turbo',
+messages: [{ role: 'user', content: 'Hello' }]
 });
 
 console.log(response1.choices[0].message.content === response3.choices[0].message.content); // false
@@ -245,14 +250,15 @@ console.log(response1.choices[0].message.content === response3.choices[0].messag
 mockControl.resetSeed();
 
 const response4 = await openai.chat.completions.create({
-  model: 'gpt-3.5-turbo',
-  messages: [{ role: 'user', content: 'Hello' }]
+model: 'gpt-3.5-turbo',
+messages: [{ role: 'user', content: 'Hello' }]
 });
 
 // response4 will be random
 
 mockControl.stopMocking();
-```
+
+````
 
 ## Using Fixed Response Templates
 
@@ -303,7 +309,7 @@ const imageResponse = await openai.images.generate({
 console.log(imageResponse.data[0].url); // "https://example.com/test-image.png"
 
 mockControl.stopMocking();
-```
+````
 
 ## Working with Response Templates
 
@@ -318,12 +324,14 @@ console.log(Object.keys(templates)); // ['SIMPLE_CHAT', 'FUNCTION_CALL', 'TOOL_C
 
 // Create a custom template based on existing one
 const customChatTemplate = mockControl.createResponseTemplate('SIMPLE_CHAT', {
-  choices: [{
-    message: {
-      content: 'This is my custom response content',
-    }
-  }],
-  model: 'gpt-4-mock'
+  choices: [
+    {
+      message: {
+        content: 'This is my custom response content',
+      },
+    },
+  ],
+  model: 'gpt-4-mock',
 });
 
 console.log(customChatTemplate.choices[0].message.content); // "This is my custom response content"
@@ -341,15 +349,18 @@ import OpenAI from 'openai';
 
 // Use seed for faker-generated content, but override specific responses
 const mockControl = mockOpenAIResponse(true, {
-  seed: 12345
+  seed: 12345,
 });
 
 // Add a custom endpoint that returns fixed content
 mockControl.addCustomEndpoint('POST', '/v1/custom/test', () => {
-  return [200, {
-    message: 'This is always the same',
-    timestamp: Date.now() // This will vary
-  }];
+  return [
+    200,
+    {
+      message: 'This is always the same',
+      timestamp: Date.now(), // This will vary
+    },
+  ];
 });
 
 const openai = new OpenAI({ apiKey: 'test-key' });
@@ -357,14 +368,14 @@ const openai = new OpenAI({ apiKey: 'test-key' });
 // Regular chat will be seeded (consistent faker content)
 const chatResponse = await openai.chat.completions.create({
   model: 'gpt-3.5-turbo',
-  messages: [{ role: 'user', content: 'Hello' }]
+  messages: [{ role: 'user', content: 'Hello' }],
 });
 
 // Custom endpoint will have mixed behavior
 const customResponse = await fetch('https://api.openai.com/v1/custom/test', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({})
+  body: JSON.stringify({}),
 });
 
 mockControl.stopMocking();
@@ -375,44 +386,46 @@ mockControl.stopMocking();
 ```javascript
 describe('My OpenAI Integration', () => {
   let mockControl;
-  
+
   beforeEach(() => {
     // Use consistent seed for all tests
     mockControl = mockOpenAIResponse(true, { seed: 12345 });
   });
-  
+
   afterEach(() => {
     mockControl.stopMocking();
   });
-  
+
   test('should handle chat responses consistently', async () => {
     const openai = new OpenAI({ apiKey: 'test-key' });
-    
+
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
-      messages: [{ role: 'user', content: 'Test message' }]
+      messages: [{ role: 'user', content: 'Test message' }],
     });
-    
+
     // This assertion will always pass with the same seed
     expect(response.choices[0].message.content).toBe('expedita quibusdam corrupti autem'); // or whatever the seeded response is
   });
-  
+
   test('should handle function calls with fixed responses', async () => {
     // Switch to fixed responses for this test
     mockControl.stopMocking();
     mockControl = mockOpenAIResponse(true, { useFixedResponses: true });
-    
+
     const openai = new OpenAI({ apiKey: 'test-key' });
-    
+
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [{ role: 'user', content: 'Test' }],
-      functions: [{ name: 'test_func', parameters: { type: 'object', properties: {} } }]
+      functions: [{ name: 'test_func', parameters: { type: 'object', properties: {} } }],
     });
-    
+
     // This will always be the same
     expect(response.choices[0].message.function_call.name).toBe('test_function');
-    expect(response.choices[0].message.function_call.arguments).toBe('{"param1": "test_value", "param2": 42}');
+    expect(response.choices[0].message.function_call.arguments).toBe(
+      '{"param1": "test_value", "param2": 42}'
+    );
   });
 });
 ```

@@ -6,19 +6,19 @@ export const RESPONSE_TEMPLATES = {
   SIMPLE_CHAT: {
     choices: [
       {
-        finish_reason: "stop",
+        finish_reason: 'stop',
         index: 0,
         message: {
-          content: "This is a consistent test response.",
-          role: "assistant",
+          content: 'This is a consistent test response.',
+          role: 'assistant',
         },
         logprobs: null,
       },
     ],
     created: 1640995200,
-    id: "chatcmpl-test123456789",
-    model: "gpt-3.5-mock",
-    object: "chat.completion",
+    id: 'chatcmpl-test123456789',
+    model: 'gpt-3.5-mock',
+    object: 'chat.completion',
     usage: {
       completion_tokens: 10,
       prompt_tokens: 20,
@@ -27,22 +27,22 @@ export const RESPONSE_TEMPLATES = {
   },
 
   FUNCTION_CALL: {
-    id: "chatcmpl-test123456789",
-    object: "chat.completion",
+    id: 'chatcmpl-test123456789',
+    object: 'chat.completion',
     created: 1640995200,
-    model: "gpt-3.5-mock",
+    model: 'gpt-3.5-mock',
     choices: [
       {
         index: 0,
         message: {
-          role: "assistant",
+          role: 'assistant',
           content: null,
           function_call: {
-            name: "test_function",
+            name: 'test_function',
             arguments: '{"param1": "test_value", "param2": 42}',
           },
         },
-        finish_reason: "function_call",
+        finish_reason: 'function_call',
       },
     ],
     usage: {
@@ -53,28 +53,28 @@ export const RESPONSE_TEMPLATES = {
   },
 
   TOOL_CALL: {
-    id: "chatcmpl-test123456789",
-    object: "chat.completion",
+    id: 'chatcmpl-test123456789',
+    object: 'chat.completion',
     created: 1640995200,
-    model: "gpt-3.5-mock",
+    model: 'gpt-3.5-mock',
     choices: [
       {
         index: 0,
         message: {
-          role: "assistant",
+          role: 'assistant',
           content: null,
           tool_calls: [
             {
-              id: "call_test123456789",
-              type: "function",
+              id: 'call_test123456789',
+              type: 'function',
               function: {
-                name: "test_function",
+                name: 'test_function',
                 arguments: '{"param1": "test_value", "param2": 42}',
               },
             },
           ],
         },
-        finish_reason: "tool_calls",
+        finish_reason: 'tool_calls',
       },
     ],
     usage: {
@@ -88,7 +88,7 @@ export const RESPONSE_TEMPLATES = {
     created: 1640995200,
     data: [
       {
-        url: "https://example.com/test-image.png",
+        url: 'https://example.com/test-image.png',
       },
     ],
   },
@@ -117,7 +117,7 @@ export function createResponseTemplate(templateType, overrides = {}) {
  */
 function deepMerge(target, source) {
   const result = { ...target };
-  
+
   for (const key in source) {
     if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
       result[key] = deepMerge(result[key] || {}, source[key]);
@@ -125,6 +125,6 @@ function deepMerge(target, source) {
       result[key] = source[key];
     }
   }
-  
+
   return result;
 }

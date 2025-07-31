@@ -7,6 +7,7 @@ This is a Node.js module for mocking OpenAI API responses in a development envir
 It's useful for testing and development purposes when you don't want to make actual API calls.
 
 The module supports the following OpenAI API endpoints:
+
 - chat completions
 - chat completions with streaming
 - chat completions with functions
@@ -55,15 +56,16 @@ mockOpenAIResponse(true);
 
 // With configuration options
 mockOpenAIResponse(false, {
-    includeErrors: true,    // Simulate random API errors
-    latency: 1000,         // Add 1 second delay to responses
-    logRequests: true,     // Log incoming requests to console
-    seed: 12345,           // Seed for consistent/deterministic responses
-    useFixedResponses: true // Use predefined fixed response templates
+  includeErrors: true, // Simulate random API errors
+  latency: 1000, // Add 1 second delay to responses
+  logRequests: true, // Log incoming requests to console
+  seed: 12345, // Seed for consistent/deterministic responses
+  useFixedResponses: true, // Use predefined fixed response templates
 });
 ```
 
 The function accepts two parameters:
+
 - `force` (boolean): Determines whether the mock response should be used regardless of the environment. If false or not provided, mocking only occurs in development environment.
 - `options` (object): Additional configuration options
   - `includeErrors` (boolean): When true, randomly simulates API errors
@@ -73,6 +75,7 @@ The function accepts two parameters:
   - `useFixedResponses` (boolean): Use predefined fixed response templates for completely consistent responses
 
 The function returns an object with control methods:
+
 ```js
 const mock = mockOpenAIResponse();
 
@@ -83,18 +86,18 @@ console.log(mock.isActive);
 mock.stopMocking();
 
 // Seed management for consistent outputs
-mock.setSeed(12345);        // Set a new seed for deterministic responses
-mock.resetSeed();           // Reset to random responses
+mock.setSeed(12345); // Set a new seed for deterministic responses
+mock.resetSeed(); // Reset to random responses
 
 // Template management
 const templates = mock.getResponseTemplates(); // Get available templates
 const customTemplate = mock.createResponseTemplate('SIMPLE_CHAT', {
-    choices: [{ message: { content: 'Custom response' } }]
+  choices: [{ message: { content: 'Custom response' } }],
 });
 
 // Add custom endpoint mock (uses api.openai.com as base url)
 mock.addCustomEndpoint('POST', '/v1/custom', (uri, body) => {
-    return [200, { custom: 'response' }];
+  return [200, { custom: 'response' }];
 });
 ```
 
@@ -102,17 +105,18 @@ mock.addCustomEndpoint('POST', '/v1/custom', (uri, body) => {
 
 ```js
 // Call the mockOpenAIResponse function once to set up the mock
-mockOpenAIResponse() 
+mockOpenAIResponse();
 
 // Now, when you call the OpenAI API, it will return a mock response
 const response = await openai.chat.completions.create({
-                model: "gpt-3.5",
-                messages: [
-                    { role: 'system', content: "You're an expert chef" },
-                    { role: 'user', content: "Suggest at least 5 recipes" },
-                ]
+  model: 'gpt-3.5',
+  messages: [
+    { role: 'system', content: "You're an expert chef" },
+    { role: 'user', content: 'Suggest at least 5 recipes' },
+  ],
 });
- ```
+```
+
 In this example, the `response` constant will contain mock data, simulating a response from the OpenAI API:
 
 ```javascript
@@ -132,24 +136,25 @@ In this example, the `response` constant will contain mock data, simulating a re
       usage: { completion_tokens: 17, prompt_tokens: 57, total_tokens: 74 }
 }
 ```
+
 The library also supports mocking `stream` responses
 
 ```js
 // Call the mockOpenAIResponse function once to set up the mock
-mockOpenAIResponse() 
+mockOpenAIResponse();
 // Now, when you call the OpenAI API, it will return a mock response
 const response = await openai.chat.completions.create({
-                model: "gpt-3.5",
-                stream : true,
-                messages: [
-                    { role: 'system', content: "You're an expert chef" },
-                    { role: 'user', content: "Suggest at least 5 recipes" },
-                ]
+  model: 'gpt-3.5',
+  stream: true,
+  messages: [
+    { role: 'system', content: "You're an expert chef" },
+    { role: 'user', content: 'Suggest at least 5 recipes' },
+  ],
 });
 
-// then read it 
+// then read it
 for await (const part of response) {
-    console.log(part.choices[0]?.delta?.content || '')
+  console.log(part.choices[0]?.delta?.content || '');
 }
 ```
 
@@ -168,12 +173,12 @@ const mock = mockOpenAIResponse(true, { seed: 12345 });
 // Multiple calls will return identical responses
 const response1 = await openai.chat.completions.create({
   model: 'gpt-3.5-turbo',
-  messages: [{ role: 'user', content: 'Hello' }]
+  messages: [{ role: 'user', content: 'Hello' }],
 });
 
 const response2 = await openai.chat.completions.create({
   model: 'gpt-3.5-turbo',
-  messages: [{ role: 'user', content: 'Hello' }]
+  messages: [{ role: 'user', content: 'Hello' }],
 });
 
 // response1 and response2 will be identical
@@ -190,11 +195,11 @@ const mock = mockOpenAIResponse(true, { useFixedResponses: true });
 
 const response = await openai.chat.completions.create({
   model: 'gpt-3.5-turbo',
-  messages: [{ role: 'user', content: 'Any message' }]
+  messages: [{ role: 'user', content: 'Any message' }],
 });
 
 // Will always return the same fixed response
-console.log(response.choices[0].message.content); 
+console.log(response.choices[0].message.content);
 // "This is a consistent test response."
 ```
 
@@ -209,7 +214,7 @@ const mock = mockOpenAIResponse(true);
 mock.setSeed(12345);
 const responseA = await openai.chat.completions.create({...});
 
-// Test scenario B  
+// Test scenario B
 mock.setSeed(54321);
 const responseB = await openai.chat.completions.create({...});
 
@@ -227,7 +232,6 @@ This module uses the `nock` library to intercept HTTP calls to the following Ope
 - `https://api.openai.com/v1/chat/completions`: This endpoint is used for generating chat completions.
 - `https://api.openai.com/v1/images/generations`: This endpoint is used for generating images.
 
-
 ## TypeScript Support
 
 This package includes TypeScript definitions out of the box. After installing the package, you can use it with full type support:
@@ -237,37 +241,40 @@ import { mockOpenAIResponse, MockOptions } from 'openai-api-mock';
 
 // Configure with TypeScript types
 const options: MockOptions = {
-    includeErrors: true,       // Optional: simulate random API errors
-    latency: 1000,            // Optional: add 1 second delay
-    logRequests: true,        // Optional: log requests to console
-    seed: 12345,              // Optional: seed for consistent responses
-    useFixedResponses: true   // Optional: use fixed response templates
+  includeErrors: true, // Optional: simulate random API errors
+  latency: 1000, // Optional: add 1 second delay
+  logRequests: true, // Optional: log requests to console
+  seed: 12345, // Optional: seed for consistent responses
+  useFixedResponses: true, // Optional: use fixed response templates
 };
 
 const mock = mockOpenAIResponse(true, options);
 
 // TypeScript provides full type checking and autocompletion
-console.log(mock.isActive);  // boolean
-mock.stopMocking();         // function
-mock.setSeed(54321);        // function with type checking
-mock.resetSeed();           // function
+console.log(mock.isActive); // boolean
+mock.stopMocking(); // function
+mock.setSeed(54321); // function with type checking
+mock.resetSeed(); // function
 
 // Template methods with type safety
-const templates = mock.getResponseTemplates();  // Record<string, any>
+const templates = mock.getResponseTemplates(); // Record<string, any>
 const customTemplate = mock.createResponseTemplate('SIMPLE_CHAT', {
-    choices: [{ message: { content: 'Custom content' } }]
+  choices: [{ message: { content: 'Custom content' } }],
 });
 
 // Custom endpoints with type safety
 mock.addCustomEndpoint('POST', '/v1/custom', (uri, body) => {
-    return [200, { custom: 'response' }];
+  return [200, { custom: 'response' }];
 });
 ```
+
 ## Dependencies
+
 This module depends on the following npm packages:
 
 - `nock` : For intercepting HTTP calls.
 - `@faker-js/faker` : For generating fake data.
 
 ## License
+
 This project is licensed under the MIT License.
