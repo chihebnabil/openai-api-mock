@@ -56,8 +56,12 @@ export function mockOpenAIResponse(force = false, options = {}) {
 
   // Determine correct endpoints based on base URL
   const isDefaultBaseUrl = baseUrl === OPEN_AI_BASE_URL;
-  const chatEndpoint = isDefaultBaseUrl ? CHAT_COMPLETIONS_ENDPOINT : CHAT_COMPLETIONS_ENDPOINT_NO_PREFIX;
-  const imageEndpoint = isDefaultBaseUrl ? IMAGE_GENERATIONS_ENDPOINT : IMAGE_GENERATIONS_ENDPOINT_NO_PREFIX;
+  const chatEndpoint = isDefaultBaseUrl
+    ? CHAT_COMPLETIONS_ENDPOINT
+    : CHAT_COMPLETIONS_ENDPOINT_NO_PREFIX;
+  const imageEndpoint = isDefaultBaseUrl
+    ? IMAGE_GENERATIONS_ENDPOINT
+    : IMAGE_GENERATIONS_ENDPOINT_NO_PREFIX;
 
   // Mock chat completions endpoint
   nock(baseUrl)

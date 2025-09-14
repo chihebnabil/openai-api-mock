@@ -3,7 +3,7 @@ import { generateFunctionCallArguments, generateToolCallArguments } from './fake
 
 export function createDefaultResponse(created, requestBody = {}) {
   const model = requestBody.model ? `${requestBody.model}-mock` : 'gpt-3.5-mock';
-  
+
   return {
     choices: [
       {

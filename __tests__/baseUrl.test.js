@@ -9,7 +9,7 @@ describe('Mock OpenAI with custom baseUrl', () => {
 
   test('should use default base URL when no baseUrl is provided', async () => {
     const mock = mockOpenAIResponse(true, { logRequests: false });
-    
+
     // Test with default OpenAI client
     const openai = new OpenAI({ apiKey: 'test-key' });
     const response = await openai.chat.completions.create({
@@ -24,17 +24,17 @@ describe('Mock OpenAI with custom baseUrl', () => {
 
   test('should mock custom base URL for chat completions', async () => {
     const customBaseUrl = 'https://custom-api.example.com';
-    const mock = mockOpenAIResponse(true, { 
+    const mock = mockOpenAIResponse(true, {
       baseUrl: customBaseUrl,
-      logRequests: false 
+      logRequests: false,
     });
 
     // Test with custom base URL using OpenAI client
-    const openai = new OpenAI({ 
+    const openai = new OpenAI({
       apiKey: 'test-key',
-      baseURL: customBaseUrl 
+      baseURL: customBaseUrl,
     });
-    
+
     const response = await openai.chat.completions.create({
       model: 'gpt-4',
       messages: [{ role: 'user', content: 'Hello from custom API' }],
@@ -50,17 +50,17 @@ describe('Mock OpenAI with custom baseUrl', () => {
 
   test('should mock custom base URL for image generations', async () => {
     const customBaseUrl = 'https://custom-api.example.com';
-    const mock = mockOpenAIResponse(true, { 
+    const mock = mockOpenAIResponse(true, {
       baseUrl: customBaseUrl,
-      logRequests: false 
+      logRequests: false,
     });
 
     // Test with custom base URL using OpenAI client
-    const openai = new OpenAI({ 
+    const openai = new OpenAI({
       apiKey: 'test-key',
-      baseURL: customBaseUrl 
+      baseURL: customBaseUrl,
     });
-    
+
     const response = await openai.images.generate({
       prompt: 'A custom image',
       n: 1,
@@ -75,9 +75,9 @@ describe('Mock OpenAI with custom baseUrl', () => {
 
   test('should work with custom endpoints using custom base URL', async () => {
     const customBaseUrl = 'https://local-api.example.com';
-    const mock = mockOpenAIResponse(true, { 
+    const mock = mockOpenAIResponse(true, {
       baseUrl: customBaseUrl,
-      logRequests: false 
+      logRequests: false,
     });
 
     // Add custom endpoint to the custom base URL
@@ -94,25 +94,25 @@ describe('Mock OpenAI with custom baseUrl', () => {
     });
 
     const data = await response.json();
-    expect(data).toEqual({ 
-      custom: 'response from custom base', 
-      receivedBody: { test: 'data' } 
+    expect(data).toEqual({
+      custom: 'response from custom base',
+      receivedBody: { test: 'data' },
     });
   });
 
   test('should handle different custom base URLs', async () => {
     // Test Azure OpenAI-style URL
     const azureBaseUrl = 'https://myresource.openai.azure.com';
-    const azureMock = mockOpenAIResponse(true, { 
+    const azureMock = mockOpenAIResponse(true, {
       baseUrl: azureBaseUrl,
-      logRequests: false 
+      logRequests: false,
     });
 
-    const azureOpenai = new OpenAI({ 
+    const azureOpenai = new OpenAI({
       apiKey: 'test-key',
-      baseURL: azureBaseUrl 
+      baseURL: azureBaseUrl,
     });
-    
+
     const azureResponse = await azureOpenai.chat.completions.create({
       model: 'gpt-4',
       messages: [{ role: 'user', content: 'Hello Azure' }],
@@ -125,16 +125,16 @@ describe('Mock OpenAI with custom baseUrl', () => {
 
     // Test localhost URL
     const localBaseUrl = 'http://localhost:11434';
-    const localMock = mockOpenAIResponse(true, { 
+    const localMock = mockOpenAIResponse(true, {
       baseUrl: localBaseUrl,
-      logRequests: false 
+      logRequests: false,
     });
 
-    const localOpenai = new OpenAI({ 
+    const localOpenai = new OpenAI({
       apiKey: 'test-key',
-      baseURL: localBaseUrl 
+      baseURL: localBaseUrl,
     });
-    
+
     const localResponse = await localOpenai.chat.completions.create({
       model: 'llama2',
       messages: [{ role: 'user', content: 'Hello localhost' }],
@@ -146,16 +146,16 @@ describe('Mock OpenAI with custom baseUrl', () => {
 
   test('should handle streaming with custom base URL', async () => {
     const customBaseUrl = 'https://streaming-api.example.com';
-    const mock = mockOpenAIResponse(true, { 
+    const mock = mockOpenAIResponse(true, {
       baseUrl: customBaseUrl,
-      logRequests: false 
+      logRequests: false,
     });
 
-    const openai = new OpenAI({ 
+    const openai = new OpenAI({
       apiKey: 'test-key',
-      baseURL: customBaseUrl 
+      baseURL: customBaseUrl,
     });
-    
+
     const response = await openai.chat.completions.create({
       model: 'gpt-4',
       stream: true,
@@ -164,7 +164,7 @@ describe('Mock OpenAI with custom baseUrl', () => {
 
     let streamContent = '';
     let chunkCount = 0;
-    
+
     for await (const part of response) {
       chunkCount++;
       if (part.choices[0]?.delta?.content) {
@@ -180,9 +180,9 @@ describe('Mock OpenAI with custom baseUrl', () => {
 
   test('should not interfere with requests to other domains', async () => {
     const customBaseUrl = 'https://custom-api.example.com';
-    const mock = mockOpenAIResponse(true, { 
+    const mock = mockOpenAIResponse(true, {
       baseUrl: customBaseUrl,
-      logRequests: false 
+      logRequests: false,
     });
 
     // This request should NOT be intercepted since it's to a different domain
@@ -190,7 +190,7 @@ describe('Mock OpenAI with custom baseUrl', () => {
       const response = await fetch('https://httpbin.org/get', {
         method: 'GET',
       });
-      
+
       const data = await response.json();
       // Should get real response from httpbin.org, not our mock
       expect(data).toHaveProperty('url', 'https://httpbin.org/get');

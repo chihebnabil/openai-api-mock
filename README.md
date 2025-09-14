@@ -139,6 +139,7 @@ const response = await openai.chat.completions.create({
 ```
 
 When using custom `baseUrl`, the mock will:
+
 - Intercept requests to the specified base URL instead of `api.openai.com`
 - Block network connections to that specific host while allowing other network requests
 - Apply all the same mocking behavior (errors, latency, seeding, etc.) to the custom endpoint
