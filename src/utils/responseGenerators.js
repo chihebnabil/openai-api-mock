@@ -1,7 +1,9 @@
 import { faker } from '@faker-js/faker';
 import { generateFunctionCallArguments, generateToolCallArguments } from './fakeDataGenerators.js';
 
-export function createDefaultResponse(created) {
+export function createDefaultResponse(created, requestBody = {}) {
+  const model = requestBody.model ? `${requestBody.model}-mock` : 'gpt-3.5-mock';
+  
   return {
     choices: [
       {
@@ -16,7 +18,7 @@ export function createDefaultResponse(created) {
     ],
     created: created,
     id: `chatcmpl-${faker.string.alphanumeric(30)}`,
-    model: `gpt-3.5-mock`,
+    model: model,
     object: 'chat.completion',
     usage: {
       completion_tokens: 17,
@@ -32,12 +34,13 @@ export function createFunctionCallingResponse(requestBody, created) {
     ? [createToolCallObject(requestBody)]
     : createFunctionCallObject(requestBody);
   const functionOrToolCall = isTool ? 'tool_calls' : 'function_call';
+  const model = requestBody.model ? `${requestBody.model}-mock` : 'gpt-3.5-mock';
 
   return {
     id: `chatcmpl-${faker.string.alphanumeric(30)}`,
     object: 'chat.completion',
     created: created,
-    model: 'gpt-3.5-mock',
+    model: model,
     choices: [
       {
         index: 0,
@@ -75,8 +78,9 @@ export function createFunctionCallObject(requestBody) {
   };
 }
 
-export function getSteamChatObject() {
+export function getSteamChatObject(requestBody = {}) {
   const created = Math.floor(Date.now() / 1000);
+  const model = requestBody.model ? `${requestBody.model}-mock` : 'gpt-3.5-mock';
 
   let lorem = faker.lorem.paragraph();
   const loremArray = lorem.split(' ');
@@ -85,7 +89,7 @@ export function getSteamChatObject() {
     id: `chatcmpl-${faker.string.alphanumeric(30)}`,
     object: 'chat.completion.chunk',
     created: created,
-    model: 'gpt-3.5-mock',
+    model: model,
     system_fingerprint: null,
     choices: [
       {

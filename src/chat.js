@@ -7,7 +7,7 @@ export function getChatResponce(requestBody) {
   const created = Math.floor(Date.now() / 1000);
 
   if (!requestBody.functions && !requestBody.tools) {
-    return createDefaultResponse(created);
+    return createDefaultResponse(created, requestBody);
   }
 
   return createFunctionCallingResponse(requestBody, created);

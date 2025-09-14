@@ -1,7 +1,7 @@
 import { Readable } from 'node:stream';
 import { getSteamChatObject } from './utils/responseGenerators.js';
 
-export function createChatStream() {
+export function createChatStream(requestBody) {
   const stream = new Readable({
     read() {},
   });
@@ -12,7 +12,7 @@ export function createChatStream() {
   function sendData() {
     setTimeout(() => {
       if (count < maxCount - 1) {
-        stream.push(`data: ${getSteamChatObject()}\n\n`);
+        stream.push(`data: ${getSteamChatObject(requestBody)}\n\n`);
         count++;
         sendData(); // Call the function recursively until the last iteration
       } else if (count === maxCount - 1) {

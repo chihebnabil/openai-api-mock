@@ -61,6 +61,7 @@ mockOpenAIResponse(false, {
   logRequests: true, // Log incoming requests to console
   seed: 12345, // Seed for consistent/deterministic responses
   useFixedResponses: true, // Use predefined fixed response templates
+  baseUrl: 'https://api.openai.com', // Base URL for OpenAI API or compatible service
 });
 ```
 
@@ -73,6 +74,7 @@ The function accepts two parameters:
   - `logRequests` (boolean): Logs incoming requests to console for debugging
   - `seed` (number|string): Seed value for consistent/deterministic responses using faker.js
   - `useFixedResponses` (boolean): Use predefined fixed response templates for completely consistent responses
+  - `baseUrl` (string): Base URL for the OpenAI API or OpenAI-compatible service (defaults to `https://api.openai.com`)
 
 The function returns an object with control methods:
 
@@ -95,11 +97,51 @@ const customTemplate = mock.createResponseTemplate('SIMPLE_CHAT', {
   choices: [{ message: { content: 'Custom response' } }],
 });
 
-// Add custom endpoint mock (uses api.openai.com as base url)
+// Add custom endpoint mock (uses configured base URL)
 mock.addCustomEndpoint('POST', '/v1/custom', (uri, body) => {
   return [200, { custom: 'response' }];
 });
 ```
+
+### Using with OpenAI-Compatible Services
+
+The library supports mocking any OpenAI-compatible API by configuring the `baseUrl` option. This is useful when working with services like Azure OpenAI, local models, or other OpenAI-compatible endpoints.
+
+```js
+// Mock Azure OpenAI Service
+mockOpenAIResponse(true, {
+  baseUrl: 'https://your-resource.openai.azure.com',
+  logRequests: true,
+});
+
+// Mock local OpenAI-compatible server (e.g., Ollama, LocalAI)
+mockOpenAIResponse(true, {
+  baseUrl: 'http://localhost:11434', // Ollama default port
+  logRequests: true,
+});
+
+// Mock other OpenAI-compatible services
+mockOpenAIResponse(true, {
+  baseUrl: 'https://api.anthropic.com', // or other compatible endpoints
+  logRequests: true,
+});
+
+// Your existing OpenAI client code will work unchanged
+const openai = new OpenAI({
+  apiKey: 'your-api-key',
+  baseURL: 'https://your-resource.openai.azure.com', // This will be mocked
+});
+
+const response = await openai.chat.completions.create({
+  model: 'gpt-4',
+  messages: [{ role: 'user', content: 'Hello!' }],
+});
+```
+
+When using custom `baseUrl`, the mock will:
+- Intercept requests to the specified base URL instead of `api.openai.com`
+- Block network connections to that specific host while allowing other network requests
+- Apply all the same mocking behavior (errors, latency, seeding, etc.) to the custom endpoint
 
 ### Example responses
 
@@ -227,10 +269,21 @@ For comprehensive examples and best practices, see [CONSISTENCY_EXAMPLES.md](./C
 
 ## Intercepted URLs
 
-This module uses the `nock` library to intercept HTTP calls to the following OpenAI API endpoints:
+This module uses the `nock` library to intercept HTTP calls to OpenAI API endpoints. By default, it intercepts:
 
 - `https://api.openai.com/v1/chat/completions`: This endpoint is used for generating chat completions.
 - `https://api.openai.com/v1/images/generations`: This endpoint is used for generating images.
+
+When using the `baseUrl` option, the intercepted URLs will use your configured base URL instead:
+
+```js
+// Custom base URL example
+mockOpenAIResponse(true, { baseUrl: 'https://your-api.example.com' });
+
+// Will intercept:
+// - https://your-api.example.com/v1/chat/completions
+// - https://your-api.example.com/v1/images/generations
+```
 
 ## TypeScript Support
 
@@ -246,6 +299,7 @@ const options: MockOptions = {
   logRequests: true, // Optional: log requests to console
   seed: 12345, // Optional: seed for consistent responses
   useFixedResponses: true, // Optional: use fixed response templates
+  baseUrl: 'https://api.openai.com', // Optional: custom base URL
 };
 
 const mock = mockOpenAIResponse(true, options);

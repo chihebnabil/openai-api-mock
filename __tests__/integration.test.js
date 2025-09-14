@@ -26,7 +26,7 @@ describe('Mock OpenAI Chat & Image generation API', () => {
       expect(response).toHaveProperty('id');
       expect(response).toHaveProperty('object', 'chat.completion');
       expect(response).toHaveProperty('created');
-      expect(response.model).toEqual('gpt-3.5-mock');
+      expect(response.model).toEqual('gpt-3.5-turbo-mock');
       expect(response.choices).toBeInstanceOf(Array);
       expect(response.choices[0]).toHaveProperty('index', 0);
       expect(response.choices[0]).toHaveProperty('message');
@@ -51,7 +51,7 @@ describe('Mock OpenAI Chat & Image generation API', () => {
         expect(part).toHaveProperty('id');
         expect(part).toHaveProperty('object', 'chat.completion.chunk');
         expect(part).toHaveProperty('created');
-        expect(part).toHaveProperty('model', 'gpt-3.5-mock');
+        expect(part).toHaveProperty('model', 'gpt-3.5-turbo-mock');
         expect(part.choices[0]).toHaveProperty('index', 0);
         expect(part.choices[0]).toHaveProperty('delta');
         if (part.choices[0]?.delta?.content) {
@@ -96,7 +96,7 @@ describe('Mock OpenAI Chat & Image generation API', () => {
         function_call: { name: 'get_recipes' },
       });
 
-      expect(response.model).toEqual('gpt-3.5-mock');
+      expect(response.model).toEqual('gpt-3.5-turbo-mock');
       expect(response.choices[0]).toHaveProperty('finish_reason', 'function_call');
       expect(response.choices[0].message.function_call).toHaveProperty('name', 'get_recipes');
       expect(response.choices[0].message.function_call).toHaveProperty('arguments');
@@ -165,7 +165,7 @@ describe('Mock OpenAI Chat & Image generation API', () => {
         tool_choice: 'auto',
       });
 
-      expect(response.model).toEqual('gpt-3.5-mock');
+      expect(response.model).toEqual('gpt-3.5-turbo-mock');
       expect(response.choices[0]).toHaveProperty('finish_reason', 'tool_calls');
       expect(response.choices[0].message.tool_calls).toBeInstanceOf(Array);
 

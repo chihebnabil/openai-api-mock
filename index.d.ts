@@ -19,6 +19,11 @@ export interface MockOptions {
    * Whether to use predefined fixed response templates
    */
   useFixedResponses?: boolean;
+  /**
+   * Base URL for the OpenAI API or OpenAI-compatible service
+   * @default 'https://api.openai.com'
+   */
+  baseUrl?: string;
 }
 
 export interface MockControl {
@@ -52,7 +57,7 @@ export interface MockControl {
   /**
    * Adds a custom endpoint mock
    * @param method - HTTP method (GET, POST, etc.)
-   * @param path - Endpoint path (will be appended to api.openai.com)
+   * @param path - Endpoint path (will be appended to the configured base URL)
    * @param handler - Function to handle the request and return response
    */
   addCustomEndpoint: (

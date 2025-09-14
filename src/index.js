@@ -8,6 +8,9 @@ import { createResponseTemplate, RESPONSE_TEMPLATES } from './utils/responseTemp
 const OPEN_AI_BASE_URL = 'https://api.openai.com';
 const CHAT_COMPLETIONS_ENDPOINT = '/v1/chat/completions';
 const IMAGE_GENERATIONS_ENDPOINT = '/v1/images/generations';
+// For custom base URLs, paths don't include /v1 prefix
+const CHAT_COMPLETIONS_ENDPOINT_NO_PREFIX = '/chat/completions';
+const IMAGE_GENERATIONS_ENDPOINT_NO_PREFIX = '/images/generations';
 const customScopes = []; // Track custom scopes
 /**
  * Mock OpenAI API responses
@@ -18,6 +21,7 @@ const customScopes = []; // Track custom scopes
  * @param {boolean} options.logRequests - Whether to log incoming requests
  * @param {number|string} options.seed - Seed value for consistent/deterministic responses
  * @param {boolean} options.useFixedResponses - Whether to use predefined fixed response templates
+ * @param {string} options.baseUrl - Base URL for the OpenAI API or OpenAI-compatible service
  * @returns {Object} An object with control methods for the mocks
  */
 export function mockOpenAIResponse(force = false, options = {}) {
@@ -27,6 +31,7 @@ export function mockOpenAIResponse(force = false, options = {}) {
     logRequests = false,
     seed = null,
     useFixedResponses = false,
+    baseUrl = OPEN_AI_BASE_URL,
   } = options;
 
   // Set seed for consistent outputs if provided
@@ -44,9 +49,19 @@ export function mockOpenAIResponse(force = false, options = {}) {
     return { isActive: false, stopMocking };
   }
 
+  // Log the base URL being used for mocking
+  if (logRequests) {
+    console.log(`[openai-api-mock] Mocking requests to: ${baseUrl}`);
+  }
+
+  // Determine correct endpoints based on base URL
+  const isDefaultBaseUrl = baseUrl === OPEN_AI_BASE_URL;
+  const chatEndpoint = isDefaultBaseUrl ? CHAT_COMPLETIONS_ENDPOINT : CHAT_COMPLETIONS_ENDPOINT_NO_PREFIX;
+  const imageEndpoint = isDefaultBaseUrl ? IMAGE_GENERATIONS_ENDPOINT : IMAGE_GENERATIONS_ENDPOINT_NO_PREFIX;
+
   // Mock chat completions endpoint
-  nock(OPEN_AI_BASE_URL)
-    .post(CHAT_COMPLETIONS_ENDPOINT)
+  nock(baseUrl)
+    .post(chatEndpoint)
     .delay(latency) // Add delay to the interceptor
     .reply(function (uri, requestBody) {
       if (logRequests) {
@@ -91,8 +106,8 @@ export function mockOpenAIResponse(force = false, options = {}) {
     .persist(); // Allow multiple requests
 
   // Mock image generations endpoint
-  nock(OPEN_AI_BASE_URL)
-    .post(IMAGE_GENERATIONS_ENDPOINT)
+  nock(baseUrl)
+    .post(imageEndpoint)
     .delay(latency) // Add delay to the interceptor
     .reply(function (uri, requestBody) {
       if (logRequests) {
@@ -126,8 +141,9 @@ export function mockOpenAIResponse(force = false, options = {}) {
     })
     .persist(); // Allow multiple requests
 
-  // Enable other network connections
-  nock.enableNetConnect(host => host !== 'api.openai.com');
+  // Enable other network connections (block only the configured base URL)
+  const baseUrlHost = new URL(baseUrl).hostname;
+  nock.enableNetConnect(host => host !== baseUrlHost);
 
   return {
     isActive: true,
@@ -178,7 +194,7 @@ export function mockOpenAIResponse(force = false, options = {}) {
      */
     addCustomEndpoint(method, path, handler) {
       const methodLower = method.toLowerCase();
-      const scope = nock(OPEN_AI_BASE_URL)[methodLower](path).reply(handler).persist(); // Keep the mock active indefinitely
+      const scope = nock(baseUrl)[methodLower](path).reply(handler).persist(); // Keep the mock active indefinitely
       customScopes.push(scope);
     },
   };
