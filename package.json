@@ -43,6 +43,7 @@
   "module": "./dist/index.js",
   "exports": {
     ".": {
+      "types": "./index.d.ts",
       "require": "./dist/index.cjs",
       "import": "./dist/index.js"
     }
