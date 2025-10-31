@@ -27,7 +27,7 @@ describe('Mock OpenAI Chat & Image generation API', () => {
       expect(response).toHaveProperty('object', 'chat.completion');
       expect(response).toHaveProperty('created');
       expect(response.model).toEqual('gpt-3.5-turbo-mock');
-      expect(response.choices).toBeInstanceOf(Array);
+      expect(Array.isArray(response.choices)).toBe(true);
       expect(response.choices[0]).toHaveProperty('index', 0);
       expect(response.choices[0]).toHaveProperty('message');
       expect(response.choices[0].message).toHaveProperty('role', 'assistant');
@@ -102,7 +102,7 @@ describe('Mock OpenAI Chat & Image generation API', () => {
       expect(response.choices[0].message.function_call).toHaveProperty('arguments');
       const args = JSON.parse(response.choices[0].message.function_call.arguments);
       expect(args).toHaveProperty('recipes');
-      expect(args.recipes).toBeInstanceOf(Array);
+      expect(Array.isArray(args.recipes)).toBe(true);
       expect(args.recipes.length).toBeGreaterThanOrEqual(5);
       args.recipes.forEach(recipe => {
         expect(recipe).toHaveProperty('name');
@@ -167,7 +167,7 @@ describe('Mock OpenAI Chat & Image generation API', () => {
 
       expect(response.model).toEqual('gpt-3.5-turbo-mock');
       expect(response.choices[0]).toHaveProperty('finish_reason', 'tool_calls');
-      expect(response.choices[0].message.tool_calls).toBeInstanceOf(Array);
+      expect(Array.isArray(response.choices[0].message.tool_calls)).toBe(true);
 
       const recipesArgs = JSON.parse(response.choices[0].message.tool_calls[0].function.arguments);
       expect(recipesArgs).toHaveProperty('recipes');
@@ -186,7 +186,7 @@ describe('Mock OpenAI Chat & Image generation API', () => {
 
       expect(response).toHaveProperty('created');
       expect(response).toHaveProperty('data');
-      expect(response.data).toBeInstanceOf(Array);
+      expect(Array.isArray(response.data)).toBe(true);
       expect(response.data.length).toBe(1);
       expect(response.data[0]).toHaveProperty('revised_prompt');
       expect(response.data[0]).toHaveProperty('url');
@@ -202,7 +202,7 @@ describe('Mock OpenAI Chat & Image generation API', () => {
         quality: 'standard',
       });
 
-      expect(response.data).toBeInstanceOf(Array);
+      expect(Array.isArray(response.data)).toBe(true);
       expect(response.data.length).toBe(3);
       response.data.forEach(image => {
         expect(image).toHaveProperty('url');
