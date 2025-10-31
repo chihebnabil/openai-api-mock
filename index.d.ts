@@ -52,7 +52,7 @@ export interface MockControl {
    */
   createResponseTemplate: (
     templateType: string,
-    overrides?: Record<string, any>
+    overrides?: Record<string, any>,
   ) => Record<string, any>;
   /**
    * Adds a custom endpoint mock
@@ -63,7 +63,7 @@ export interface MockControl {
   addCustomEndpoint: (
     method: string,
     path: string,
-    handler: (uri: string, body: any) => [number, any] | Promise<[number, any]>
+    handler: (uri: string, body: any) => [number, any] | Promise<[number, any]>,
   ) => void;
 }
 

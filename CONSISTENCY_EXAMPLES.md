@@ -424,7 +424,7 @@ describe('My OpenAI Integration', () => {
     // This will always be the same
     expect(response.choices[0].message.function_call.name).toBe('test_function');
     expect(response.choices[0].message.function_call.arguments).toBe(
-      '{"param1": "test_value", "param2": 42}'
+      '{"param1": "test_value", "param2": 42}',
     );
   });
 });
