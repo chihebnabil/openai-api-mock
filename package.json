@@ -59,7 +59,7 @@
   "devDependencies": {
     "jest": "^30.0.0",
     "node-fetch": "^3.3.2",
-    "openai": "^5.0.0",
+    "openai": "^6.0.0",
     "prettier": "^3.0.0",
     "vite": "^7.0.0"
   },
