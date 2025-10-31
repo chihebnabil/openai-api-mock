@@ -1,6 +1,6 @@
 {
   "name": "openai-api-mock",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A Node.js module for mocking OpenAI-compatible API responses in a development environment with consistency mechanisms for deterministic testing",
   "repository": {
     "type": "git",
