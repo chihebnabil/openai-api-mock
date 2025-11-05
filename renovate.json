@@ -1,4 +1,16 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", ":dependencyDashboard"]
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+    ":automergeMinor",
+    ":automergePatch",
+    ":automergePr",
+    "group:allNonMajor",
+    "schedule:weekly"
+  ],
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 10,
+  "dependencyDashboard": true,
+  "timezone": "Europe/London"
 }
