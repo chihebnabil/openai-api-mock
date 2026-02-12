@@ -13,8 +13,6 @@ The module supports the following OpenAI API endpoints:
 - chat completions with functions
 - image generations
 
-> This module is powering the sandbox mode for [Aipify](https://aipify.co).
-
 ## Table of Contents
 
 - [Installation](#installation)
