@@ -3,14 +3,20 @@
   "extends": [
     "config:recommended",
     ":semanticCommits",
-    ":automergeMinor",
-    ":automergePatch",
-    ":automergePr",
-    "group:allNonMajor",
     "schedule:weekly"
   ],
-  "prHourlyLimit": 2,
-  "prConcurrentLimit": 10,
+  "prHourlyLimit": 1,
+  "prConcurrentLimit": 3,
   "dependencyDashboard": true,
-  "timezone": "Europe/London"
+  "timezone": "Africa/Algiers",
+  "automerge": false,
+  "minimumReleaseAge": "3 days",
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true,
+      "minimumReleaseAge": "3 days"
+    }
+  ]
 }
