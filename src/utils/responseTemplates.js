@@ -2,6 +2,8 @@
  * Predefined response templates for consistent testing
  */
 
+import { deterministicVector } from './vectorUtils.js';
+
 export const RESPONSE_TEMPLATES = {
   SIMPLE_CHAT: {
     choices: [
@@ -91,6 +93,22 @@ export const RESPONSE_TEMPLATES = {
         url: 'https://example.com/test-image.png',
       },
     ],
+  },
+
+  EMBEDDING: {
+    object: 'list',
+    model: 'text-embedding-3-small',
+    data: [
+      {
+        object: 'embedding',
+        index: 0,
+        embedding: deterministicVector('openai-api-mock:EMBEDDING_TEMPLATE', 1536),
+      },
+    ],
+    usage: {
+      prompt_tokens: 5,
+      total_tokens: 5,
+    },
   },
 };
 

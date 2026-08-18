@@ -3,14 +3,21 @@ import { faker } from '@faker-js/faker';
 import { getChatResponce } from './chat.js';
 import { createChatStream } from './chat.stream.js';
 import { getImageResponce } from './image.js';
+import {
+  getEmbeddingResponse,
+  getFixedEmbeddingResponse,
+  validateEmbeddingRequest,
+} from './embeddings.js';
 import { createResponseTemplate, RESPONSE_TEMPLATES } from './utils/responseTemplates.js';
 
 const OPEN_AI_BASE_URL = 'https://api.openai.com';
 const CHAT_COMPLETIONS_ENDPOINT = '/v1/chat/completions';
 const IMAGE_GENERATIONS_ENDPOINT = '/v1/images/generations';
+const EMBEDDINGS_ENDPOINT = '/v1/embeddings';
 // For custom base URLs, paths don't include /v1 prefix
 const CHAT_COMPLETIONS_ENDPOINT_NO_PREFIX = '/chat/completions';
 const IMAGE_GENERATIONS_ENDPOINT_NO_PREFIX = '/images/generations';
+const EMBEDDINGS_ENDPOINT_NO_PREFIX = '/embeddings';
 const customScopes = []; // Track custom scopes
 /**
  * Mock OpenAI API responses
@@ -62,6 +69,7 @@ export function mockOpenAIResponse(force = false, options = {}) {
   const imageEndpoint = isDefaultBaseUrl
     ? IMAGE_GENERATIONS_ENDPOINT
     : IMAGE_GENERATIONS_ENDPOINT_NO_PREFIX;
+  const embeddingsEndpoint = isDefaultBaseUrl ? EMBEDDINGS_ENDPOINT : EMBEDDINGS_ENDPOINT_NO_PREFIX;
 
   // Mock chat completions endpoint
   nock(baseUrl)
@@ -140,6 +148,40 @@ export function mockOpenAIResponse(force = false, options = {}) {
         return [200, getImageResponce(requestBody)];
       } catch (error) {
         console.error('[openai-api-mock] Error processing image request:', error);
+        return [500, { error: { message: 'Internal server error in mock' } }];
+      }
+    })
+    .persist(); // Allow multiple requests
+
+  // Mock embeddings endpoint
+  nock(baseUrl)
+    .post(embeddingsEndpoint)
+    .delay(latency) // Add delay to the interceptor
+    .reply(function (uri, requestBody) {
+      if (logRequests) {
+        console.log(`[openai-api-mock] Embeddings request:`, JSON.stringify(requestBody, null, 2));
+      }
+
+      try {
+        // Validate request against the OpenAI API contract
+        const validationError = validateEmbeddingRequest(requestBody);
+        if (validationError) {
+          return validationError;
+        }
+
+        // Simulate random errors if enabled
+        if (includeErrors && Math.random() < 0.05) {
+          return [429, { error: { message: 'Rate limit exceeded' } }];
+        }
+
+        // Use fixed responses if enabled
+        if (useFixedResponses) {
+          return [200, getFixedEmbeddingResponse(requestBody, createResponseTemplate('EMBEDDING'))];
+        }
+
+        return [200, getEmbeddingResponse(requestBody)];
+      } catch (error) {
+        console.error('[openai-api-mock] Error processing embeddings request:', error);
         return [500, { error: { message: 'Internal server error in mock' } }];
       }
     })

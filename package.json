@@ -1,7 +1,7 @@
 {
   "name": "openai-api-mock",
-  "version": "0.3.1",
-  "description": "A Node.js module for mocking OpenAI-compatible API responses in a development environment with consistency mechanisms for deterministic testing",
+  "version": "0.4.0",
+  "description": "A Node.js module for mocking OpenAI-compatible API responses (chat, embeddings, images) in a development environment with consistency mechanisms for deterministic testing",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chihebnabil/openai-api-mock.git"
@@ -25,7 +25,12 @@
     "deterministic",
     "consistency",
     "seeding",
-    "templates"
+    "templates",
+    "embeddings",
+    "rag",
+    "vector",
+    "similarity",
+    "semantic-search"
   ],
   "scripts": {
     "build": "vite build",

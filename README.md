@@ -12,6 +12,7 @@ The module supports the following OpenAI API endpoints:
 - chat completions with streaming
 - chat completions with functions
 - image generations
+- embeddings
 
 ## Table of Contents
 
@@ -199,6 +200,46 @@ for await (const part of response) {
 }
 ```
 
+### Embeddings
+
+The embeddings endpoint (`/v1/embeddings`) is mocked with full API compatibility: model dimension defaults (`1536` for `ada-002`/`3-small`, `3072` for `3-large`), the `dimensions` parameter, `encoding_format: 'base64'`, array and token-array inputs, usage reporting, and the same validation errors as the real API (missing parameters, non-embedding models, oversized arrays, etc.).
+
+```js
+mockOpenAIResponse(true);
+
+const response = await openai.embeddings.create({
+  model: 'text-embedding-3-small',
+  input: 'The food was delicious and the waiter...',
+});
+
+// {
+//   object: 'list',
+//   data: [
+//     {
+//       object: 'embedding',
+//       index: 0,
+//       embedding: [0.0231, -0.0093, ...], // 1536 floats
+//     },
+//   ],
+//   model: 'text-embedding-3-small',
+//   usage: { prompt_tokens: 11, total_tokens: 11 },
+// }
+```
+
+**Deterministic vectors.** Embedding vectors are derived from a hash of the input (not random), so the same input always produces the exact same unit-length vector — independent of seeds, call order, or test runs. This makes them ideal for snapshot tests and for verifying cosine-similarity/deduplication logic in CI:
+
+```js
+const [a, b] = await Promise.all([
+  openai.embeddings.create({ model: 'text-embedding-3-small', input: 'hello world' }),
+  openai.embeddings.create({ model: 'text-embedding-3-small', input: 'hello world' }),
+]);
+
+console.log(JSON.stringify(a) === JSON.stringify(b)); // true
+console.log(a.data[0].embedding); // always the same 1536 floats
+```
+
+> Note: vectors are deterministic but not semantically meaningful — two different strings do not produce similar vectors. The value is reproducibility, not semantic search accuracy.
+
 ## Consistent Outputs for Testing
 
 The library provides several mechanisms to achieve consistent, deterministic outputs for reliable testing:
@@ -272,6 +313,7 @@ This module uses the `nock` library to intercept HTTP calls to OpenAI API endpoi
 
 - `https://api.openai.com/v1/chat/completions`: This endpoint is used for generating chat completions.
 - `https://api.openai.com/v1/images/generations`: This endpoint is used for generating images.
+- `https://api.openai.com/v1/embeddings`: This endpoint is used for generating embeddings.
 
 When using the `baseUrl` option, the intercepted URLs will use your configured base URL instead:
 
@@ -282,6 +324,7 @@ mockOpenAIResponse(true, { baseUrl: 'https://your-api.example.com' });
 // Will intercept:
 // - https://your-api.example.com/v1/chat/completions
 // - https://your-api.example.com/v1/images/generations
+// - https://your-api.example.com/v1/embeddings
 ```
 
 ## TypeScript Support

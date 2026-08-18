@@ -200,7 +200,7 @@ describe('Mock OpenAI with custom baseUrl', () => {
     expect(customResponse.model).toEqual('gpt-4-mock');
     expect(customResponse).toHaveProperty('id');
     expect(customResponse).toHaveProperty('object', 'chat.completion');
-    
+
     // Verify that the mock is specific to the custom base URL
     // by checking that it intercepts the right domain
     expect(customResponse.choices[0].message).toHaveProperty('content');
